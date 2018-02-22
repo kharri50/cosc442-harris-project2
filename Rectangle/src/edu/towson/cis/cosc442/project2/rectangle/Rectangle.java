@@ -20,13 +20,14 @@ public class Rectangle {
 		this.p2 = p2;
 	}
 	
+
 	/**
 	 * Gets the area.
 	 *
 	 * @return the area
 	 */
 	public Double getArea() {
-		return Math.abs((p2.x - p1.x) * (p2.y - p1.y));
+		return Math.abs((p2.getX() - p1.getX())) * Math.abs(p2.getY() - p1.getY());
 	}
 	
 	/**
@@ -35,6 +36,6 @@ public class Rectangle {
 	 * @return the diagonal
 	 */
 	public Double getDiagonal() {
-		return Math.sqrt(Math.pow((p2.x - p1.x), 2) + Math.pow((p2.y - p1.y), 2));
+		return Math.sqrt(Math.pow((p2.getX() - p1.getX()), 2) + Math.pow((p2.getY() - p1.getY()), 2));
 	}
 }

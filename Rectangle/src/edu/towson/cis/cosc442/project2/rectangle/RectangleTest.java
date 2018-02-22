@@ -6,12 +6,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+// TODO: Auto-generated Javadoc
 /**
  * The unit test Class for Rectangle.
  */
 public class RectangleTest {
 	
-	/** Declaring necessary test objects for {@link Rectangle} */
+	/**  Declaring necessary test objects for {@link Rectangle}. */
 	Rectangle rect1, rect2;
 
 	/**
@@ -30,7 +31,7 @@ public class RectangleTest {
 	 */
 	@Test
 	public void testGetArea() {
-		assertEquals(10.0, rect1.getArea(),0.001);
+		assertEquals(10.0, rect1.getArea(),0);
 		assertEquals(6.0, rect2.getArea(),0.001);
 	}
 
