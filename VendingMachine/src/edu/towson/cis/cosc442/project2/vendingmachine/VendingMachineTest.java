@@ -21,6 +21,14 @@ public class VendingMachineTest {
 	/** The vmi. */
 	private VendingMachineItem vmi;
 	
+	/** list of Vendingmachine items implemented as an ArrayList **/
+	
+	private ArrayList<VendingMachineItem> item_list;
+	
+	private String [] codes = {"A", "B","C","D"};
+
+
+	 
 	/* The following is a code segment 
 	
 	/**
@@ -30,8 +38,24 @@ public class VendingMachineTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		 vm = new VendingMachine();
-		 vmi = new VendingMachineItem("Test Item", 5.00);
+		// create a new vending machine object 
+		vm = new VendingMachine();
+		 
+		item_list = new ArrayList<VendingMachineItem>();
+		 
+		// just for fun, lets make an array of 5 items with random prices
+		int item_count = 5;
+		Random r = new Random();
+		for(int i = 0; i<item_count; i++) {
+			// random price from 1 - 8 
+			double randomPrice =  1 + (8 * r.nextDouble());
+			// make a random name for the testing item 
+			String itemName = "Testing Item "+ Integer.toString(i);
+			// add the item to the list 
+			item_list.add(new VendingMachineItem(itemName, randomPrice));
+		}
+		assertEquals(item_list.size(),item_count);
+		
 	}
 
 	
@@ -51,50 +75,57 @@ public class VendingMachineTest {
 	 */
 	@Test 
 	public void addItemTest(){
-		/* basically what we're doing here is adding 16 items 
-		 * and if that works, then adding works. Ya know?
-		 */
-		ArrayList<VendingMachineItem> item_list = new ArrayList<VendingMachineItem>();
-		
-		// just for fun, lets make an array of 4 items with random prices
-		int item_count = 5;
-		Random r = new Random();
-		for(int i = 0; i<item_count; i++) {
-			// random price from 1 - 8 
-			double randomPrice =  1 + (8 * r.nextDouble());
-			// make a random name for the testing item 
-			String itemName = "Testing Item "+ Integer.toString(i);
-			// add the item to the arraylist 
-			item_list.add(new VendingMachineItem(itemName, randomPrice));
-		}
-		assertEquals(item_list.size(),item_count);
-
-		String [] codes = {"A", "B","C","D"};
-
+	
 		// loop through and add to the arraylist
-		for(int i = 0; i<item_count-1; i++) {
+		for(int i = 0; i<item_list.size()-1; i++) {
 			vm.addItem(item_list.get(i), codes[i]);
 		}
 		
 		// try to add a new item and catch the exception.. for each slot!
 		for(int i = 0; i<4; i++) {
-		boolean thrown = false;
-		try {
-			vm.addItem(item_list.get(i), codes[i]);
-		}catch(VendingMachineException e) {
-			// error caught 
-			thrown = true;
+			boolean thrown = false;
+			try {
+				vm.addItem(item_list.get(i), codes[i]);
+			}catch(VendingMachineException e) {
+				// error caught 
+				thrown = true;
+			}
+			// the exception was thrown
+			assertTrue(thrown);
 		}
-		// the exception was thrown
-		assertTrue(thrown);
-		}
-		
-		
 	}
 	
 	@Test 
-	public void removeItemTest() {
+	public void removeItemTest() throws Exception {
+		// add the items to the vending machine
+		addItemTest();
 		
+		/* this is going to test removal of all items in the vending machine 
+		 * from each slot */
+	
+		for(int i =0; i<codes.length; i++) {
+			VendingMachineItem testItem = vm.removeItem(codes[i]);
+			// verify that it matches the ArrayList item at the given index.
+			assertEquals(testItem, item_list.get(i));
+		}
+		
+		
+		//try to remove an item and catch the exception.. for each slot!
+				for(int i = 0; i<4; i++) {
+					boolean thrown = false;
+					try {
+						vm.removeItem(codes[i]);
+					}catch(VendingMachineException e) {
+						// error caught 
+						String expectedMessage = "Slot "+codes[i]+" is empty -- cannot remove item";
+						// check that the exception message is correct.. 
+						assertEquals(e.getMessage(), expectedMessage);
+						thrown = true;
+					}
+					// the exception was thrown
+					assertTrue(thrown);
+				}
+				
 	}
 	
 	

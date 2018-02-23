@@ -49,7 +49,7 @@ public class VendingMachine {
 	protected double balance;
 
 	// Array items in the vending machine
-	private VendingMachineItem[] itemArray;
+	private VendingMachineItem [] itemArray;
 
 	/**
 	 * Default constructor for the vending machine. It sets all the entries in
@@ -98,8 +98,7 @@ public class VendingMachine {
 	 * 1. If you add an item to a slot that is already occupied. 
 	 * 2. If you add an item with an invalid code
 	 */
-	public void addItem(VendingMachineItem item, String code)
-			throws VendingMachineException {
+	public void addItem(VendingMachineItem item, String code) throws VendingMachineException {
 		int slotIndex = getSlotIndex(code);
 		if (itemArray[slotIndex] != null) {
 			throw new VendingMachineException(SLOT_MESSAGE + code
@@ -128,13 +127,13 @@ public class VendingMachine {
 	 * @throws VendingMachineException If the slot at the specified code is empty and if the code is invalid
 	 */
 	public VendingMachineItem removeItem(String code) throws VendingMachineException {
-		int slotIndex = getSlotIndex(code);
-		VendingMachineItem item = itemArray[slotIndex];
-		itemArray[slotIndex] = null;
+		VendingMachineItem item = itemArray[getSlotIndex(code)];
 		if ( item == null) {
 			throw new VendingMachineException(SLOT_MESSAGE + code + IS_EMPTY_MESSAGE);
+		}else {
+			 itemArray[getSlotIndex(code)] = null;
+			return item;
 		}
-		return item;
 	}
 
 	/**
