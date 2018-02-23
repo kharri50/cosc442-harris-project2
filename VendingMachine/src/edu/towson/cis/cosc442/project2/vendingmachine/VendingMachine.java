@@ -171,9 +171,10 @@ public class VendingMachine {
 	public boolean makePurchase(String code) {
 		boolean returnCode = false;
 		VendingMachineItem item = getItem(code);
+		System.out.println("Item price from remove : " + item.getPrice());
 		if(( item != null ) && ( this.balance >= item.getPrice() )) {
 			removeItem(code);
-			this.balance -= item.getPrice();
+			this.balance -=  item.getPrice();
 			returnCode = true;
 		}
 		return returnCode;

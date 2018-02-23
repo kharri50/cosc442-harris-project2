@@ -2,6 +2,7 @@ package edu.towson.cis.cosc442.project2.vendingmachine;
 
 import static org.junit.Assert.*;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -46,13 +47,16 @@ public class VendingMachineTest {
 		// just for fun, lets make an array of 5 items with random prices
 		int item_count = 5;
 		Random r = new Random();
+		DecimalFormat f = new DecimalFormat("##.00");
+
 		for(int i = 0; i<item_count; i++) {
 			// random price from 1 - 8 
 			double randomPrice =  1 + (8 * r.nextDouble());
+			double roundedPrice = Math.round(randomPrice);
 			// make a random name for the testing item 
 			String itemName = "Testing Item "+ Integer.toString(i);
 			// add the item to the list 
-			item_list.add(new VendingMachineItem(itemName, randomPrice));
+			item_list.add(new VendingMachineItem(itemName, roundedPrice));
 		}
 		assertEquals(item_list.size(),item_count);
 		
@@ -183,6 +187,47 @@ public class VendingMachineTest {
 		// now test against the good value that was inserted
 		// using checkBalance
 		assertEquals(vm.getBalance(), amount, .001);
+	}
+	
+	
+	@Test 
+	public void testMakePurchase() {
+		// okay, now we're going to purchase things
+		addItemTest(); // add items to the vending machine 
+		
+		// loop through the ArrayList to get the needed amount of money
+		double required_amount = 0;
+		for(int i = 0; i<item_list.size()-1; i++) {
+			required_amount+=item_list.get(i).getPrice();
+		}
+		
+		double expected_amount = required_amount; 
+
+		vm.insertMoney(required_amount);
+		assertEquals(vm.getBalance(), required_amount, .001);
+
+		/* now we should be able to buy everything with the 
+		 * current balance
+		 */ 
+		
+		// all codes should be filled, so purchase each one 
+		int i = 0;
+		for(String code : codes) {
+			if(vm.makePurchase(code)) {
+				/* subtract the expected balance if the purchase
+				   is successful */
+				expected_amount -= item_list.get(i).getPrice();
+			}
+			i++;
+		}
+		// now check that the balance is equal to the expected amount
+		assertEquals(vm.getBalance(), expected_amount, .001);
+		System.out.println(item_list.get(4).getPrice());
+		System.out.println(vm.getBalance());
+		
+		// now try to remove the last item 
+		//assertTrue(vm.makePurchase(code))
+		
 	}
 	
 }
