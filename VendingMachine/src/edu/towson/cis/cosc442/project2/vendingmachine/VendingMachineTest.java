@@ -125,8 +125,64 @@ public class VendingMachineTest {
 					// the exception was thrown
 					assertTrue(thrown);
 				}
-				
 	}
 	
+	/** Tests the getItem function in the VendingMachine class **/
+	@Test 
+	public void getItem() {
+		// add the items to the vending machine
+		addItemTest();
+		/* this loop does pretty much the same this as everything else */
+		testItemEquality();
+		// now test that it throws an exception 
+		String invalid = "E";
+		boolean thrown = false;
+		try {
+			vm.getItem(invalid);
+		}catch(VendingMachineException e) {
+			thrown =  true;
+		}
+		assertTrue(thrown);
+			
+	}
+
+
+	private void testItemEquality() {
+		for(int i =0; i<codes.length; i++) {
+			VendingMachineItem testItem = vm.getItem(codes[i]);
+			// verify that it matches the ArrayList item at the given index.
+			assertEquals(testItem, item_list.get(i));
+		}
+	}
+	
+	
+	@Test 
+	public void testInsertMoney() {
+		// using the vending machine object in setup 
+		double amount = 3.50;
+		vm.insertMoney(amount);
+		// now we're going to test the balance
+		
+		boolean thrown = false;
+		try {
+			vm.insertMoney(0);
+		}catch(VendingMachineException e ) {
+			thrown = true;
+		}
+		assertTrue(thrown);
+		
+		
+		boolean thrown_2 = false;
+		try {
+			vm.insertMoney(-.001);
+		}catch(VendingMachineException e ) {
+			thrown_2 = true;
+		}
+		assertTrue(thrown_2);
+		
+		// now test against the good value that was inserted
+		// using checkBalance
+		assertEquals(vm.getBalance(), amount, .001);
+	}
 	
 }
