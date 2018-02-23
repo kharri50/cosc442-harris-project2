@@ -46,6 +46,9 @@ public class VendingMachineItemTest {
 	}
 
 	
+	/**
+	 * Test item constructor.
+	 */
 	@Test 
 	public void testItemConstructor() {
 		VendingMachineItem testCon = new VendingMachineItem("Skittles",1.25);
