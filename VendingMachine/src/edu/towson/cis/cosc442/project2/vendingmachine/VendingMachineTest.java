@@ -220,6 +220,7 @@ public class VendingMachineTest {
 			}
 			i++;
 		}
+		assertEquals(expected_amount, 0, .001);
 		// now check that the balance is equal to the expected amount
 		assertEquals(vm.getBalance(), expected_amount, .001);
 		System.out.println(item_list.get(4).getPrice());
@@ -227,7 +228,39 @@ public class VendingMachineTest {
 		
 		// now try to remove the last item 
 		//assertTrue(vm.makePurchase(code))
-		
 	}
 	
+	@Test 
+	public void testReturnChange() {
+		addItemTest();
+		
+		double required_amount = 0;
+		for(int i = 0; i<item_list.size(); i++) {
+			required_amount+=item_list.get(i).getPrice();
+		}
+		
+		double expected_amount = required_amount; 
+
+		vm.insertMoney(required_amount);
+		assertEquals(vm.getBalance(), required_amount, .001);
+
+		/* now we should be able to buy everything with the 
+		 * current balance
+		 */ 
+		
+		// all codes should be filled, so purchase each one 
+		int i = 0;
+		for(String code : codes) {
+			if(vm.makePurchase(code)) {
+				/* subtract the expected balance if the purchase
+				   is successful */
+				expected_amount -= item_list.get(i).getPrice();
+			}
+			i++;
+		}
+	
+	
+	// get the change and make sure it's equal to the expected amount
+	  assertEquals(expected_amount,vm.returnChange(),.001);
+	}
 }
