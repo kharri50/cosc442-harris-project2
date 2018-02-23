@@ -189,6 +189,24 @@ public class VendingMachineTest {
 		assertEquals(vm.getBalance(), amount, .001);
 	}
 	
+	@Test 
+	public void testGetBalance() {
+		// using the vending machine object in setup 
+				double amount = 3.50;
+				vm.insertMoney(amount);
+				// now we're going to test the balance
+				
+				boolean thrown = false;
+				try {
+					vm.insertMoney(0);
+				}catch(VendingMachineException e ) {
+					thrown = true;
+				}
+				assertTrue(thrown);
+				assertEquals(vm.getBalance(), amount, .001);
+				
+	}
+	
 	
 	@Test 
 	public void testMakePurchase() {
